@@ -1,0 +1,5 @@
+{
+  "name": "n8n Agent Optimizer",
+  "description": "A specialized tool for analyzing n8n workflows and engineering world-class prompts for AI agents using high-level optimization strategies.",
+  "requestFramePermissions": []
+}
