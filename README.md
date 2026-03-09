@@ -1,20 +1,23 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# GrowLeads — Lead Magnet Engine
 
-# Run and deploy your AI Studio app
+AI-powered lead magnet generation system for B2B lead generation campaigns.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/drive/1u5XWkJOTriLglr7G4RWqp2iAlF_6x_Wa
+- **Mode 1 — New Lead Magnet Generation**: Create lead magnets from structured inputs (niche, persona, pain point, format, goal)
+- **Mode 2 — Asset Repurposing**: Adapt existing assets for new niches and audiences
+- **Resource Vault**: Searchable library of all generated lead magnets with filtering
+- **Landing Page Builder**: Create gated download pages with AI-generated copy
+- **Lead Capture**: Collect leads through landing page forms with validation
+- **Analytics Dashboard**: Track downloads, opt-ins, meetings, and revenue per magnet
+- **CSV Export**: Export captured leads for CRM import
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
-
+**Prerequisites:** Node.js
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+2. Set the `GEMINI_API_KEY` in `.env.local` to your Gemini API key
 3. Run the app:
    `npm run dev`
