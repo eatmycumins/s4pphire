@@ -5,51 +5,97 @@ import Optimizer from './components/Optimizer';
 import { N8nWorkflow, AINodeInfo, AppStep } from './types';
 import { Icons } from './components/Icon';
 
+// AI node type patterns to detect
+const AI_TYPE_PATTERNS = [
+    'langchain',
+    'openai',
+    'anthropic',
+    'gemini',
+    'mistral',
+    'huggingface',
+    'cohere',
+    'ollama',
+    'chatgpt',
+];
+
+const isAINode = (nodeType: string): boolean => {
+    const typeLower = nodeType.toLowerCase();
+    return AI_TYPE_PATTERNS.some(pattern => typeLower.includes(pattern));
+};
+
+const extractPrompts = (node: any): { sys?: string; user?: string } => {
+    let sys: string | undefined;
+    let user: string | undefined;
+
+    // Check systemMessage in options
+    if (node.parameters?.options?.systemMessage) {
+        sys = String(node.parameters.options.systemMessage);
+    }
+
+    // Check for system message directly in parameters
+    if (!sys && node.parameters?.systemMessage) {
+        sys = String(node.parameters.systemMessage);
+    }
+
+    // Check for system prompt variations
+    if (!sys && node.parameters?.systemPrompt) {
+        sys = String(node.parameters.systemPrompt);
+    }
+
+    // Check messages array (standard format)
+    if (node.parameters?.messages?.values?.[0]?.content) {
+        user = String(node.parameters.messages.values[0].content);
+    } else if (node.parameters?.messages?.messageValues?.[0]?.message) {
+        user = String(node.parameters.messages.messageValues[0].message);
+    }
+
+    // Image generation prompt field
+    if (node.parameters?.prompt && typeof node.parameters.prompt === 'string') {
+        if (!user) user = node.parameters.prompt;
+        if (!sys) sys = "Image Generation Model Context";
+    }
+
+    // Check for text field
+    if (!user && node.parameters?.text && typeof node.parameters.text === 'string') {
+        user = node.parameters.text;
+    }
+
+    // Check for input field
+    if (!user && node.parameters?.input && typeof node.parameters.input === 'string') {
+        user = node.parameters.input;
+    }
+
+    // Fallback: scan for any string parameter that looks like a prompt
+    if (!sys && !user) {
+        const params = node.parameters || {};
+        const potentialKeys = Object.keys(params).filter(k =>
+            typeof params[k] === 'string' &&
+            params[k].length > 10 &&
+            (k.toLowerCase().includes('prompt') ||
+             k.toLowerCase().includes('text') ||
+             k.toLowerCase().includes('message') ||
+             k.toLowerCase().includes('instruction'))
+        );
+        if (potentialKeys.length > 0) {
+            user = String(params[potentialKeys[0]]);
+        }
+    }
+
+    return { sys, user };
+};
+
 const App: React.FC = () => {
-  const [step, setStep] = useState<AppStep>(AppStep.UPLOAD);
-  const [nodes, setNodes] = useState<AINodeInfo[]>([]);
-  const [selectedNode, setSelectedNode] = useState<AINodeInfo | null>(null);
+    const [step, setStep] = useState<AppStep>(AppStep.UPLOAD);
+    const [nodes, setNodes] = useState<AINodeInfo[]>([]);
+    const [selectedNode, setSelectedNode] = useState<AINodeInfo | null>(null);
 
-  const processWorkflow = (workflow: N8nWorkflow) => {
-    const aiNodes: AINodeInfo[] = [];
+    const processWorkflow = (workflow: N8nWorkflow) => {
+        const aiNodes: AINodeInfo[] = [];
 
-    workflow.nodes.forEach(node => {
-        const typeLower = node.type.toLowerCase();
-        
-        const isAI = 
-            typeLower.includes('langchain') || 
-            typeLower.includes('openai') || 
-            typeLower.includes('anthropic') || 
-            typeLower.includes('gemini') ||
-            typeLower.includes('mistral') ||
-            (node.type === '@n8n/n8n-nodes-langchain.googleGemini' && node.parameters.prompt); 
+        workflow.nodes.forEach(node => {
+            if (!isAINode(node.type)) return;
 
-        if (isAI) {
-            let sys = undefined;
-            let user = undefined;
-
-            if (node.parameters.options?.systemMessage) {
-                sys = node.parameters.options.systemMessage as string;
-            }
-            if (node.parameters.messages?.values?.[0]?.content) {
-                user = node.parameters.messages.values[0].content;
-            } else if (node.parameters.messages?.messageValues?.[0]?.message) {
-                 user = node.parameters.messages.messageValues[0].message;
-            }
-
-            if (node.parameters.prompt && typeof node.parameters.prompt === 'string') {
-                user = node.parameters.prompt;
-                sys = "Image Generation Model Context";
-            }
-
-            if (!sys && !user) {
-                const potentialKeys = Object.keys(node.parameters).filter(k => 
-                    typeof node.parameters[k] === 'string' && (k.toLowerCase().includes('prompt') || k.toLowerCase().includes('text'))
-                );
-                if (potentialKeys.length > 0) {
-                    user = node.parameters[potentialKeys[0]] as string;
-                }
-            }
+            const { sys, user } = extractPrompts(node);
 
             aiNodes.push({
                 id: node.id,
@@ -59,76 +105,81 @@ const App: React.FC = () => {
                 currentUserPrompt: user,
                 originalJson: node
             });
-        }
-    });
+        });
 
-    setNodes(aiNodes);
-    setStep(AppStep.SELECT);
-  };
+        setNodes(aiNodes);
+        setStep(AppStep.SELECT);
+    };
 
-  const handleNodeSelect = (node: AINodeInfo) => {
-    setSelectedNode(node);
-    setStep(AppStep.OPTIMIZE);
-  };
+    const handleNodeSelect = (node: AINodeInfo) => {
+        setSelectedNode(node);
+        setStep(AppStep.OPTIMIZE);
+    };
 
-  return (
-    <div className="min-h-screen bg-atelier-bg text-atelier-ink flex flex-col relative selection:bg-atelier-ink selection:text-white">
-      
-      {/* Texture Overlay */}
-      <div className="bg-grain"></div>
+    const handleBackToUpload = () => {
+        setStep(AppStep.UPLOAD);
+        setNodes([]);
+        setSelectedNode(null);
+    };
 
-      {/* Decorative Aura */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-white to-transparent opacity-80 pointer-events-none blur-3xl z-0"></div>
+    return (
+        <div className="min-h-screen bg-atelier-bg text-atelier-ink flex flex-col relative selection:bg-atelier-ink selection:text-white">
 
-      {step !== AppStep.OPTIMIZE && (
-        <header className="relative z-10 w-full pt-12 pb-6 px-6">
-            <div className="max-w-4xl mx-auto flex items-center justify-between border-b border-atelier-border pb-6">
-                <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setStep(AppStep.UPLOAD)}>
-                    <div className="relative w-10 h-10 flex items-center justify-center bg-white rounded-lg border border-atelier-border shadow-soft group-hover:shadow-md transition-elegant">
-                        <Icons.Sparkles className="w-5 h-5 text-atelier-ink" />
+            {/* Texture Overlay */}
+            <div className="bg-grain"></div>
+
+            {/* Decorative Aura */}
+            <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-white to-transparent opacity-80 pointer-events-none blur-3xl z-0"></div>
+
+            {step !== AppStep.OPTIMIZE && (
+                <header className="relative z-10 w-full pt-12 pb-6 px-6">
+                    <div className="max-w-4xl mx-auto flex items-center justify-between border-b border-atelier-border pb-6">
+                        <div className="flex items-center gap-3 group cursor-pointer" onClick={handleBackToUpload}>
+                            <div className="relative w-10 h-10 flex items-center justify-center bg-white rounded-lg border border-atelier-border shadow-soft group-hover:shadow-md transition-elegant">
+                                <Icons.Sparkles className="w-5 h-5 text-atelier-ink" />
+                            </div>
+                            <div>
+                                <h1 className="serif-heading text-2xl text-atelier-ink tracking-tight">
+                                    The Optimizer
+                                </h1>
+                                <p className="text-[10px] font-sans text-atelier-muted tracking-[0.2em] uppercase">n8n Agent Atelier</p>
+                            </div>
+                        </div>
+
+                        <div className="hidden md:flex items-center gap-6">
+                            <div className="flex items-center gap-2 text-xs font-sans text-atelier-muted">
+                                <span className="w-1.5 h-1.5 rounded-full bg-green-500/50"></span>
+                                <span className="opacity-60">System Ready</span>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h1 className="serif-heading text-2xl text-atelier-ink tracking-tight">
-                            The Optimizer
-                        </h1>
-                        <p className="text-[10px] font-sans text-atelier-muted tracking-[0.2em] uppercase">n8n Agent Atelier</p>
-                    </div>
+                </header>
+            )}
+
+            <main className="relative z-10 flex-1 flex flex-col items-center w-full">
+                <div className="w-full h-full flex items-center justify-center">
+                    {step === AppStep.UPLOAD && (
+                        <WorkflowUploader onUpload={processWorkflow} />
+                    )}
+
+                    {step === AppStep.SELECT && (
+                        <NodeList
+                            nodes={nodes}
+                            onSelect={handleNodeSelect}
+                            onBack={handleBackToUpload}
+                        />
+                    )}
+
+                    {step === AppStep.OPTIMIZE && selectedNode && (
+                        <Optimizer
+                            node={selectedNode}
+                            onBack={() => setStep(AppStep.SELECT)}
+                        />
+                    )}
                 </div>
-                
-                <div className="hidden md:flex items-center gap-6">
-                    <div className="flex items-center gap-2 text-xs font-sans text-atelier-muted">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-500/50"></span>
-                        <span className="opacity-60">System Ready</span>
-                    </div>
-                </div>
-            </div>
-        </header>
-      )}
-
-      <main className="relative z-10 flex-1 flex flex-col items-center w-full">
-        <div className="w-full h-full flex items-center justify-center">
-            {step === AppStep.UPLOAD && (
-                <WorkflowUploader onUpload={processWorkflow} />
-            )}
-
-            {step === AppStep.SELECT && (
-                <NodeList 
-                    nodes={nodes} 
-                    onSelect={handleNodeSelect} 
-                    onBack={() => setStep(AppStep.UPLOAD)} 
-                />
-            )}
-
-            {step === AppStep.OPTIMIZE && selectedNode && (
-                <Optimizer 
-                    node={selectedNode} 
-                    onBack={() => setStep(AppStep.SELECT)} 
-                />
-            )}
+            </main>
         </div>
-      </main>
-    </div>
-  );
+    );
 };
 
 export default App;
