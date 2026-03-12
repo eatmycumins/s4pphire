@@ -40,28 +40,33 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate, isOpen, onCl
       )}
 
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-atelier-border z-50 flex flex-col transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-gl-border z-50 flex flex-col transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } lg:translate-x-0 lg:static lg:z-auto`}
       >
         {/* Logo */}
-        <div className="px-5 py-6 border-b border-atelier-border">
+        <div className="px-5 py-6 border-b border-gl-border">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 flex items-center justify-center bg-atelier-ink rounded-lg">
-                <Sparkles className="w-4.5 h-4.5 text-white" />
+              <div className="w-9 h-9 flex items-center justify-center bg-gl-blue rounded-xl">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 20C7 20 3 15 3 10C3 6.5 5.5 4 9 3C8 6 8.5 9 10 12C11 9 12.5 6 12 3C15.5 4 18 6.5 18 10C18 15 14 20 14 20" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="white" fillOpacity="0.15"/>
+                  <path d="M10.5 20V13" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                  <path d="M10.5 16L8 13.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                  <path d="M10.5 14.5L13 12" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
               </div>
               <div>
-                <h1 className="serif-heading text-lg text-atelier-ink tracking-tight leading-tight">
+                <h1 className="heading text-lg text-gl-ink tracking-tight leading-tight">
                   GrowLeads
                 </h1>
-                <p className="text-[9px] font-sans text-atelier-muted tracking-[0.15em] uppercase">
+                <p className="text-[9px]  text-gl-muted tracking-[0.15em] uppercase">
                   Lead Magnet Engine
                 </p>
               </div>
             </div>
             <button className="lg:hidden p-1" onClick={onClose}>
-              <X className="w-5 h-5 text-atelier-muted" />
+              <X className="w-5 h-5 text-gl-muted" />
             </button>
           </div>
         </div>
@@ -77,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate, isOpen, onCl
             return (
               <React.Fragment key={item.page}>
                 {showSection && (
-                  <p className="px-3 pt-5 pb-1.5 text-[10px] font-sans font-medium text-atelier-muted/60 tracking-[0.15em] uppercase">
+                  <p className="px-3 pt-5 pb-1.5 text-[10px]  font-medium text-gl-muted/60 tracking-[0.15em] uppercase">
                     {item.section}
                   </p>
                 )}
@@ -86,10 +91,10 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate, isOpen, onCl
                     onNavigate(item.page);
                     onClose();
                   }}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-sans transition-elegant mb-0.5 ${
+                  className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm  transition-elegant mb-0.5 ${
                     isActive
-                      ? 'bg-atelier-ink text-white'
-                      : 'text-atelier-muted hover:bg-atelier-border/40 hover:text-atelier-ink'
+                      ? 'bg-gl-blue text-white'
+                      : 'text-gl-muted hover:bg-gl-border/40 hover:text-gl-ink'
                   }`}
                 >
                   <Icon className="w-4 h-4 flex-shrink-0" />
@@ -101,8 +106,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate, isOpen, onCl
         </nav>
 
         {/* Footer */}
-        <div className="px-5 py-4 border-t border-atelier-border">
-          <div className="flex items-center gap-2 text-[11px] font-sans text-atelier-muted/50">
+        <div className="px-5 py-4 border-t border-gl-border">
+          <div className="flex items-center gap-2 text-[11px]  text-gl-muted/50">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500/60"></span>
             <span>System Ready</span>
           </div>

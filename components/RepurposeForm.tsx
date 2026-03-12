@@ -70,25 +70,25 @@ const RepurposeForm: React.FC<RepurposeFormProps> = ({ magnets, onNavigate, onMa
   return (
     <div className="animate-fade-in max-w-3xl">
       <div className="mb-8">
-        <h2 className="serif-heading text-2xl md:text-3xl text-atelier-ink flex items-center gap-3">
+        <h2 className="heading text-2xl md:text-3xl text-gl-ink flex items-center gap-3">
           <RefreshCw className="w-7 h-7" />
           Repurpose Asset
         </h2>
-        <p className="text-sm text-atelier-muted mt-1">
+        <p className="text-sm text-gl-muted mt-1">
           Take an existing lead magnet and adapt it for a new niche and audience.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Source Selection */}
-        <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-          <label className="block text-sm font-sans font-medium text-atelier-ink mb-2">Source Content</label>
+        <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+          <label className="block text-sm  font-medium text-gl-ink mb-2">Source Content</label>
           <div className="flex gap-2 mb-3">
             <button
               type="button"
               onClick={() => setUseCustom(false)}
               className={`text-xs px-3 py-1.5 rounded-full border transition-elegant ${
-                !useCustom ? 'bg-atelier-ink text-white border-atelier-ink' : 'border-atelier-border text-atelier-muted'
+                !useCustom ? 'bg-gl-blue text-white border-gl-blue' : 'border-gl-border text-gl-muted'
               }`}
             >
               From Library
@@ -97,7 +97,7 @@ const RepurposeForm: React.FC<RepurposeFormProps> = ({ magnets, onNavigate, onMa
               type="button"
               onClick={() => setUseCustom(true)}
               className={`text-xs px-3 py-1.5 rounded-full border transition-elegant ${
-                useCustom ? 'bg-atelier-ink text-white border-atelier-ink' : 'border-atelier-border text-atelier-muted'
+                useCustom ? 'bg-gl-blue text-white border-gl-blue' : 'border-gl-border text-gl-muted'
               }`}
             >
               Paste Content
@@ -106,9 +106,9 @@ const RepurposeForm: React.FC<RepurposeFormProps> = ({ magnets, onNavigate, onMa
 
           {!useCustom ? (
             magnets.length === 0 ? (
-              <p className="text-sm text-atelier-muted">
+              <p className="text-sm text-gl-muted">
                 No lead magnets in your library yet.{' '}
-                <button type="button" onClick={() => onNavigate(AppPage.GENERATE)} className="text-atelier-highlight hover:underline">
+                <button type="button" onClick={() => onNavigate(AppPage.GENERATE)} className="text-gl-blue hover:underline">
                   Create one first
                 </button>
                 {' '}or paste custom content.
@@ -117,7 +117,7 @@ const RepurposeForm: React.FC<RepurposeFormProps> = ({ magnets, onNavigate, onMa
               <select
                 value={selectedId}
                 onChange={(e) => setSelectedId(e.target.value)}
-                className="w-full px-3 py-2 border border-atelier-border rounded-lg text-sm font-sans focus:outline-none focus:border-atelier-ink transition-elegant bg-white"
+                className="w-full px-3 py-2 border border-gl-border rounded-lg text-sm  focus:outline-none focus:border-gl-blue transition-elegant bg-white"
               >
                 <option value="">Select a lead magnet...</option>
                 {magnets.map((m) => (
@@ -133,15 +133,15 @@ const RepurposeForm: React.FC<RepurposeFormProps> = ({ magnets, onNavigate, onMa
               onChange={(e) => setCustomContent(e.target.value)}
               placeholder="Paste your existing lead magnet, guide, checklist, or framework content here..."
               rows={8}
-              className="w-full px-3 py-2 border border-atelier-border rounded-lg text-sm font-sans focus:outline-none focus:border-atelier-ink transition-elegant resize-y"
+              className="w-full px-3 py-2 border border-gl-border rounded-lg text-sm  focus:outline-none focus:border-gl-blue transition-elegant resize-y"
             />
           )}
 
           {selectedMagnet && !useCustom && (
-            <div className="mt-3 p-3 bg-atelier-bg rounded-lg">
-              <p className="text-xs text-atelier-muted mb-1">Selected:</p>
-              <p className="text-sm font-medium text-atelier-ink">{selectedMagnet.title}</p>
-              <p className="text-xs text-atelier-muted mt-0.5">
+            <div className="mt-3 p-3 bg-gl-bg rounded-lg">
+              <p className="text-xs text-gl-muted mb-1">Selected:</p>
+              <p className="text-sm font-medium text-gl-ink">{selectedMagnet.title}</p>
+              <p className="text-xs text-gl-muted mt-0.5">
                 {selectedMagnet.niche} &middot; {selectedMagnet.format} &middot; {selectedMagnet.persona}
               </p>
             </div>
@@ -149,8 +149,8 @@ const RepurposeForm: React.FC<RepurposeFormProps> = ({ magnets, onNavigate, onMa
         </div>
 
         {/* New Niche */}
-        <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-          <label className="block text-sm font-sans font-medium text-atelier-ink mb-1">
+        <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+          <label className="block text-sm  font-medium text-gl-ink mb-1">
             New Niche <span className="text-rose-500">*</span>
           </label>
           <input
@@ -158,13 +158,13 @@ const RepurposeForm: React.FC<RepurposeFormProps> = ({ magnets, onNavigate, onMa
             value={newNiche}
             onChange={(e) => setNewNiche(e.target.value)}
             placeholder="e.g., AI Startups, Recruiting Firms..."
-            className="w-full px-3 py-2 border border-atelier-border rounded-lg text-sm font-sans focus:outline-none focus:border-atelier-ink transition-elegant"
+            className="w-full px-3 py-2 border border-gl-border rounded-lg text-sm  focus:outline-none focus:border-gl-blue transition-elegant"
           />
         </div>
 
         {/* New Persona */}
-        <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-          <label className="block text-sm font-sans font-medium text-atelier-ink mb-1">
+        <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+          <label className="block text-sm  font-medium text-gl-ink mb-1">
             New Target Persona <span className="text-rose-500">*</span>
           </label>
           <input
@@ -172,19 +172,19 @@ const RepurposeForm: React.FC<RepurposeFormProps> = ({ magnets, onNavigate, onMa
             value={newPersona}
             onChange={(e) => setNewPersona(e.target.value)}
             placeholder="e.g., Founders, Growth Leads..."
-            className="w-full px-3 py-2 border border-atelier-border rounded-lg text-sm font-sans focus:outline-none focus:border-atelier-ink transition-elegant"
+            className="w-full px-3 py-2 border border-gl-border rounded-lg text-sm  focus:outline-none focus:border-gl-blue transition-elegant"
           />
         </div>
 
         {/* Additional Context */}
-        <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-          <label className="block text-sm font-sans font-medium text-atelier-ink mb-1">Additional Context</label>
+        <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+          <label className="block text-sm  font-medium text-gl-ink mb-1">Additional Context</label>
           <textarea
             value={additionalContext}
             onChange={(e) => setAdditionalContext(e.target.value)}
             placeholder="Any specific instructions, focus areas, or nuances for this adaptation..."
             rows={3}
-            className="w-full px-3 py-2 border border-atelier-border rounded-lg text-sm font-sans focus:outline-none focus:border-atelier-ink transition-elegant resize-y"
+            className="w-full px-3 py-2 border border-gl-border rounded-lg text-sm  focus:outline-none focus:border-gl-blue transition-elegant resize-y"
           />
         </div>
 
@@ -197,7 +197,7 @@ const RepurposeForm: React.FC<RepurposeFormProps> = ({ magnets, onNavigate, onMa
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-atelier-ink text-white font-sans font-medium rounded-xl hover:bg-atelier-ink/90 transition-elegant disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gl-blue text-white  font-medium rounded-xl hover:bg-gl-blue-dark transition-elegant disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
             <>

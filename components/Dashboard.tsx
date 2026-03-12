@@ -37,13 +37,13 @@ const Dashboard: React.FC<DashboardProps> = ({ magnets, onNavigate }) => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h2 className="serif-heading text-2xl md:text-3xl text-atelier-ink">Dashboard</h2>
-          <p className="text-sm text-atelier-muted mt-1">Your lead magnet engine at a glance</p>
+          <h2 className="heading text-2xl md:text-3xl text-gl-ink">Dashboard</h2>
+          <p className="text-sm text-gl-muted mt-1">Your lead magnet engine at a glance</p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => onNavigate(AppPage.GENERATE)}
-            className="flex items-center gap-2 px-4 py-2 bg-atelier-ink text-white text-sm font-sans rounded-lg hover:bg-atelier-ink/90 transition-elegant"
+            className="flex items-center gap-2 px-4 py-2 bg-gl-blue text-white text-sm  rounded-lg hover:bg-gl-blue-dark transition-elegant"
           >
             <Plus className="w-4 h-4" />
             New Magnet
@@ -56,12 +56,12 @@ const Dashboard: React.FC<DashboardProps> = ({ magnets, onNavigate }) => {
         {statCards.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.label} className="bg-white rounded-xl border border-atelier-border p-4 shadow-soft">
+            <div key={stat.label} className="bg-white rounded-xl border border-gl-border p-4 shadow-soft">
               <div className="flex items-center gap-2 mb-2">
                 <Icon className={`w-4 h-4 ${stat.color}`} />
-                <span className="text-[11px] text-atelier-muted font-sans uppercase tracking-wide">{stat.label}</span>
+                <span className="text-[11px] text-gl-muted  uppercase tracking-wide">{stat.label}</span>
               </div>
-              <p className="text-xl font-sans font-semibold text-atelier-ink">{stat.value}</p>
+              <p className="text-xl  font-semibold text-gl-ink">{stat.value}</p>
             </div>
           );
         })}
@@ -69,24 +69,24 @@ const Dashboard: React.FC<DashboardProps> = ({ magnets, onNavigate }) => {
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Recent Magnets */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-atelier-border shadow-soft">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-atelier-border">
-            <h3 className="font-sans font-medium text-atelier-ink">Recent Lead Magnets</h3>
+        <div className="lg:col-span-2 bg-white rounded-xl border border-gl-border shadow-soft">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-gl-border">
+            <h3 className=" font-medium text-gl-ink">Recent Lead Magnets</h3>
             <button
               onClick={() => onNavigate(AppPage.LIBRARY)}
-              className="text-xs text-atelier-highlight hover:underline"
+              className="text-xs text-gl-blue hover:underline"
             >
               View All
             </button>
           </div>
-          <div className="divide-y divide-atelier-border">
+          <div className="divide-y divide-gl-border">
             {recentMagnets.length === 0 ? (
               <div className="px-5 py-12 text-center">
-                <BookOpen className="w-8 h-8 text-atelier-accent mx-auto mb-3" />
-                <p className="text-sm text-atelier-muted mb-3">No lead magnets yet</p>
+                <BookOpen className="w-8 h-8 text-gl-accent mx-auto mb-3" />
+                <p className="text-sm text-gl-muted mb-3">No lead magnets yet</p>
                 <button
                   onClick={() => onNavigate(AppPage.GENERATE)}
-                  className="text-sm text-atelier-highlight hover:underline"
+                  className="text-sm text-gl-blue hover:underline"
                 >
                   Create your first one
                 </button>
@@ -96,16 +96,16 @@ const Dashboard: React.FC<DashboardProps> = ({ magnets, onNavigate }) => {
                 <button
                   key={m.id}
                   onClick={() => onNavigate(AppPage.VIEW_MAGNET, m.id)}
-                  className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-atelier-bg/50 transition-elegant text-left"
+                  className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-gl-bg/50 transition-elegant text-left"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-sans font-medium text-atelier-ink truncate">{m.title}</p>
-                    <p className="text-xs text-atelier-muted mt-0.5">
+                    <p className="text-sm  font-medium text-gl-ink truncate">{m.title}</p>
+                    <p className="text-xs text-gl-muted mt-0.5">
                       {m.niche} &middot; {m.format} &middot; {m.persona}
                     </p>
                   </div>
                   <span
-                    className={`ml-3 text-[10px] font-sans font-medium px-2 py-0.5 rounded-full ${
+                    className={`ml-3 text-[10px]  font-medium px-2 py-0.5 rounded-full ${
                       m.status === LeadMagnetStatus.PUBLISHED
                         ? 'bg-green-50 text-green-700'
                         : m.status === LeadMagnetStatus.ARCHIVED
@@ -124,19 +124,19 @@ const Dashboard: React.FC<DashboardProps> = ({ magnets, onNavigate }) => {
         {/* Quick Stats */}
         <div className="space-y-4">
           {/* Top Niches */}
-          <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-            <h3 className="font-sans font-medium text-atelier-ink mb-3 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-atelier-highlight" />
+          <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+            <h3 className=" font-medium text-gl-ink mb-3 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-gl-blue" />
               Top Niches
             </h3>
             {summary.topNiches.length === 0 ? (
-              <p className="text-xs text-atelier-muted">No data yet</p>
+              <p className="text-xs text-gl-muted">No data yet</p>
             ) : (
               <div className="space-y-2">
                 {summary.topNiches.map((n) => (
                   <div key={n.niche} className="flex items-center justify-between">
-                    <span className="text-sm text-atelier-ink">{n.niche}</span>
-                    <span className="text-xs text-atelier-muted bg-atelier-bg px-2 py-0.5 rounded">
+                    <span className="text-sm text-gl-ink">{n.niche}</span>
+                    <span className="text-xs text-gl-muted bg-gl-bg px-2 py-0.5 rounded">
                       {n.count} magnet{n.count !== 1 ? 's' : ''}
                     </span>
                   </div>
@@ -146,19 +146,19 @@ const Dashboard: React.FC<DashboardProps> = ({ magnets, onNavigate }) => {
           </div>
 
           {/* Top Formats */}
-          <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-            <h3 className="font-sans font-medium text-atelier-ink mb-3 flex items-center gap-2">
+          <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+            <h3 className=" font-medium text-gl-ink mb-3 flex items-center gap-2">
               <FileText className="w-4 h-4 text-purple-600" />
               Top Formats
             </h3>
             {summary.topFormats.length === 0 ? (
-              <p className="text-xs text-atelier-muted">No data yet</p>
+              <p className="text-xs text-gl-muted">No data yet</p>
             ) : (
               <div className="space-y-2">
                 {summary.topFormats.map((f) => (
                   <div key={f.format} className="flex items-center justify-between">
-                    <span className="text-sm text-atelier-ink">{f.format}</span>
-                    <span className="text-xs text-atelier-muted bg-atelier-bg px-2 py-0.5 rounded">
+                    <span className="text-sm text-gl-ink">{f.format}</span>
+                    <span className="text-xs text-gl-muted bg-gl-bg px-2 py-0.5 rounded">
                       {f.count}
                     </span>
                   </div>
@@ -168,20 +168,20 @@ const Dashboard: React.FC<DashboardProps> = ({ magnets, onNavigate }) => {
           </div>
 
           {/* Recent Leads */}
-          <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-            <h3 className="font-sans font-medium text-atelier-ink mb-3 flex items-center gap-2">
+          <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+            <h3 className=" font-medium text-gl-ink mb-3 flex items-center gap-2">
               <Users className="w-4 h-4 text-amber-600" />
               Recent Leads
             </h3>
             {summary.recentLeads.length === 0 ? (
-              <p className="text-xs text-atelier-muted">No leads captured yet</p>
+              <p className="text-xs text-gl-muted">No leads captured yet</p>
             ) : (
               <div className="space-y-2">
                 {summary.recentLeads.slice(0, 5).map((l) => (
                   <div key={l.id} className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-atelier-ink">{l.name}</p>
-                      <p className="text-[11px] text-atelier-muted">{l.email}</p>
+                      <p className="text-sm text-gl-ink">{l.name}</p>
+                      <p className="text-[11px] text-gl-muted">{l.email}</p>
                     </div>
                   </div>
                 ))}

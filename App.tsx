@@ -74,8 +74,7 @@ const App: React.FC = () => {
     const landingPage = selectedId ? getLandingPage(selectedId) : undefined;
     if (landingPage) {
       return (
-        <div className="min-h-screen bg-atelier-bg text-atelier-ink relative selection:bg-atelier-ink selection:text-white">
-          <div className="bg-grain"></div>
+        <div className="min-h-screen bg-gl-bg text-gl-ink relative selection:bg-gl-blue selection:text-white">
           <PublicLanding landingPage={landingPage} onNavigate={navigate} />
         </div>
       );
@@ -83,10 +82,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-atelier-bg text-atelier-ink flex relative selection:bg-atelier-ink selection:text-white">
-      {/* Texture Overlay */}
-      <div className="bg-grain"></div>
-
+    <div className="min-h-screen bg-gl-bg text-gl-ink flex relative selection:bg-gl-blue selection:text-white">
       {/* Sidebar */}
       <Sidebar
         currentPage={page}
@@ -98,12 +94,12 @@ const App: React.FC = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen lg:ml-0">
         {/* Mobile Header */}
-        <header className="lg:hidden sticky top-0 z-30 bg-white/80 backdrop-blur-sm border-b border-atelier-border px-4 py-3">
+        <header className="lg:hidden sticky top-0 z-30 bg-white/80 backdrop-blur-sm border-b border-gl-border px-4 py-3">
           <div className="flex items-center justify-between">
-            <button onClick={() => setSidebarOpen(true)} className="p-1.5 hover:bg-atelier-bg rounded-lg transition-elegant">
-              <Menu className="w-5 h-5 text-atelier-ink" />
+            <button onClick={() => setSidebarOpen(true)} className="p-1.5 hover:bg-gl-bg rounded-lg transition-elegant">
+              <Menu className="w-5 h-5 text-gl-ink" />
             </button>
-            <h1 className="serif-heading text-lg text-atelier-ink">GrowLeads</h1>
+            <h1 className="heading text-lg text-gl-ink">GrowLeads</h1>
             <div className="w-8" />
           </div>
         </header>

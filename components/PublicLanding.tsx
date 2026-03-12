@@ -61,12 +61,12 @@ const PublicLanding: React.FC<PublicLandingProps> = ({ landingPage, onNavigate }
   };
 
   return (
-    <div className="min-h-screen bg-atelier-bg flex flex-col">
+    <div className="min-h-screen bg-gl-bg flex flex-col">
       {/* Back button */}
       <div className="px-6 py-4">
         <button
           onClick={() => onNavigate(AppPage.LANDING_PAGES)}
-          className="flex items-center gap-1.5 text-xs text-atelier-muted hover:text-atelier-ink transition-elegant"
+          className="flex items-center gap-1.5 text-xs text-gl-muted hover:text-gl-ink transition-elegant"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
         </button>
@@ -76,22 +76,22 @@ const PublicLanding: React.FC<PublicLandingProps> = ({ landingPage, onNavigate }
         <div className="w-full max-w-lg">
           {submitted ? (
             /* Success State */
-            <div className="bg-white rounded-2xl border border-atelier-border shadow-elegant p-8 text-center animate-fade-in">
+            <div className="bg-white rounded-2xl border border-gl-border shadow-elegant p-8 text-center animate-fade-in">
               <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-5">
                 <Check className="w-8 h-8 text-green-600" />
               </div>
-              <h2 className="serif-heading text-2xl text-atelier-ink mb-2">You're In!</h2>
-              <p className="text-sm text-atelier-muted mb-6">
+              <h2 className="heading text-2xl text-gl-ink mb-2">You're In!</h2>
+              <p className="text-sm text-gl-muted mb-6">
                 Your download is ready. Click below to get your resource.
               </p>
               <button
                 onClick={handleDownload}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-atelier-ink text-white font-sans font-medium rounded-xl hover:bg-atelier-ink/90 transition-elegant"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gl-blue text-white  font-medium rounded-xl hover:bg-gl-blue-dark transition-elegant"
               >
                 <Download className="w-5 h-5" />
                 Download {magnet?.format || 'Resource'}
               </button>
-              <p className="text-[11px] text-atelier-muted mt-6">
+              <p className="text-[11px] text-gl-muted mt-6">
                 A copy has also been sent to {formData['email']}.
               </p>
             </div>
@@ -100,14 +100,14 @@ const PublicLanding: React.FC<PublicLandingProps> = ({ landingPage, onNavigate }
             <div className="animate-fade-in">
               {/* Header */}
               <div className="text-center mb-8">
-                <div className="inline-flex items-center gap-1.5 text-[10px] text-atelier-muted bg-white border border-atelier-border rounded-full px-3 py-1 mb-4">
+                <div className="inline-flex items-center gap-1.5 text-[10px] text-gl-muted bg-white border border-gl-border rounded-full px-3 py-1 mb-4">
                   <Sparkles className="w-3 h-3" /> FREE RESOURCE
                 </div>
-                <h1 className="serif-heading text-3xl md:text-4xl text-atelier-ink mb-3 leading-tight">
+                <h1 className="heading text-3xl md:text-4xl text-gl-ink mb-3 leading-tight">
                   {landingPage.headline}
                 </h1>
                 {landingPage.subheadline && (
-                  <p className="text-base text-atelier-muted max-w-md mx-auto">
+                  <p className="text-base text-gl-muted max-w-md mx-auto">
                     {landingPage.subheadline}
                   </p>
                 )}
@@ -115,11 +115,11 @@ const PublicLanding: React.FC<PublicLandingProps> = ({ landingPage, onNavigate }
 
               {/* Bullets */}
               {landingPage.bulletPoints.length > 0 && (
-                <div className="bg-white rounded-xl border border-atelier-border p-5 mb-6">
-                  <p className="text-xs font-sans font-medium text-atelier-muted uppercase tracking-wide mb-3">What you'll get:</p>
+                <div className="bg-white rounded-xl border border-gl-border p-5 mb-6">
+                  <p className="text-xs  font-medium text-gl-muted uppercase tracking-wide mb-3">What you'll get:</p>
                   <ul className="space-y-2.5">
                     {landingPage.bulletPoints.map((b, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-sm text-atelier-ink">
+                      <li key={i} className="flex items-start gap-2.5 text-sm text-gl-ink">
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
                         {b}
                       </li>
@@ -129,11 +129,11 @@ const PublicLanding: React.FC<PublicLandingProps> = ({ landingPage, onNavigate }
               )}
 
               {/* Form */}
-              <div className="bg-white rounded-2xl border border-atelier-border shadow-elegant p-6">
+              <div className="bg-white rounded-2xl border border-gl-border shadow-elegant p-6">
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {landingPage.formFields.map((field) => (
                     <div key={field.name}>
-                      <label className="block text-sm font-sans font-medium text-atelier-ink mb-1">
+                      <label className="block text-sm  font-medium text-gl-ink mb-1">
                         {field.label} {field.required && <span className="text-rose-500">*</span>}
                       </label>
                       <input
@@ -144,8 +144,8 @@ const PublicLanding: React.FC<PublicLandingProps> = ({ landingPage, onNavigate }
                           setErrors((p) => ({ ...p, [field.name]: '' }));
                         }}
                         placeholder={field.label}
-                        className={`w-full px-4 py-2.5 border rounded-lg text-sm font-sans focus:outline-none transition-elegant ${
-                          errors[field.name] ? 'border-rose-300 focus:border-rose-500' : 'border-atelier-border focus:border-atelier-ink'
+                        className={`w-full px-4 py-2.5 border rounded-lg text-sm  focus:outline-none transition-elegant ${
+                          errors[field.name] ? 'border-rose-300 focus:border-rose-500' : 'border-gl-border focus:border-gl-blue'
                         }`}
                       />
                       {errors[field.name] && (
@@ -156,13 +156,13 @@ const PublicLanding: React.FC<PublicLandingProps> = ({ landingPage, onNavigate }
 
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-atelier-ink text-white font-sans font-medium rounded-xl hover:bg-atelier-ink/90 transition-elegant"
+                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gl-blue text-white  font-medium rounded-xl hover:bg-gl-blue-dark transition-elegant"
                   >
                     <Download className="w-5 h-5" />
                     {landingPage.ctaText}
                   </button>
 
-                  <p className="text-[10px] text-center text-atelier-muted/60">
+                  <p className="text-[10px] text-center text-gl-muted/60">
                     We respect your privacy. Unsubscribe at any time.
                   </p>
                 </form>

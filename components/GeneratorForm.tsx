@@ -17,6 +17,19 @@ interface GeneratorFormProps {
   onMagnetsChange: () => void;
 }
 
+const FORMAT_DESCRIPTIONS: Record<string, string> = {
+  'Playbook': 'Multi-chapter strategic guide with frameworks, case studies, and execution plans',
+  'Checklist': 'Sequential checkbox items organized by phases. Scan-and-do format.',
+  'Framework': 'Named thinking model with stages, inputs/outputs, and evaluation criteria',
+  'Swipe File': 'Collection of copy-paste ready templates with context and customization tips',
+  'Template': 'Fill-in-the-blank document with [PLACEHOLDERS] and worked examples',
+  'Guide': 'Step-by-step instructional walkthrough with pro tips and common mistakes',
+  'Audit': 'Scoring rubric with rating scales, red/green indicators, and action items',
+  'Scorecard': 'Numerical evaluation with weighted criteria and benchmarks',
+  'Prompt Pack': 'Collection of AI prompts organized by use case with variations',
+  'Toolkit': 'Bundle of mini-templates, checklists, and frameworks in one package',
+};
+
 const NICHE_SUGGESTIONS = ['SaaS', 'B2B Agencies', 'Consulting Firms', 'AI Startups', 'Recruiting Agencies', 'FinTech', 'E-Commerce B2B', 'MarTech'];
 const PERSONA_SUGGESTIONS = ['Founders / CEOs', 'Growth Leads', 'Marketing Heads', 'SDR Teams', 'Demand Gen Managers', 'VP of Sales', 'RevOps Leaders'];
 const PAIN_SUGGESTIONS = ['Inconsistent lead flow', 'Poor outbound conversion', 'Weak LinkedIn pipeline', 'Low cold email response rates', 'Unqualified leads', 'High CAC', 'No repeatable process'];
@@ -89,7 +102,7 @@ const GeneratorForm: React.FC<GeneratorFormProps> = ({ onNavigate, onMagnetsChan
           type="button"
           onClick={() => onSelect(s)}
           className={`text-[11px] px-2.5 py-1 rounded-full border transition-elegant ${
-            value === s ? 'bg-atelier-ink text-white border-atelier-ink' : 'border-atelier-border text-atelier-muted hover:border-atelier-ink hover:text-atelier-ink'
+            value === s ? 'bg-gl-blue text-white border-gl-blue' : 'border-gl-border text-gl-muted hover:border-gl-blue hover:text-gl-blue'
           }`}
         >
           {s}
@@ -101,19 +114,19 @@ const GeneratorForm: React.FC<GeneratorFormProps> = ({ onNavigate, onMagnetsChan
   return (
     <div className="animate-fade-in max-w-3xl">
       <div className="mb-8">
-        <h2 className="serif-heading text-2xl md:text-3xl text-atelier-ink flex items-center gap-3">
+        <h2 className="heading text-2xl md:text-3xl text-gl-ink flex items-center gap-3">
           <Sparkles className="w-7 h-7" />
           New Lead Magnet
         </h2>
-        <p className="text-sm text-atelier-muted mt-1">
+        <p className="text-sm text-gl-muted mt-1">
           Define your target parameters and the AI will generate a high-conversion lead magnet.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Niche */}
-        <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-          <label className="block text-sm font-sans font-medium text-atelier-ink mb-1">
+        <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+          <label className="block text-sm  font-medium text-gl-ink mb-1">
             Target Niche <span className="text-rose-500">*</span>
           </label>
           <input
@@ -121,14 +134,14 @@ const GeneratorForm: React.FC<GeneratorFormProps> = ({ onNavigate, onMagnetsChan
             value={input.niche}
             onChange={(e) => setInput((p) => ({ ...p, niche: e.target.value }))}
             placeholder="e.g., SaaS, B2B Agencies, AI Startups..."
-            className="w-full px-3 py-2 border border-atelier-border rounded-lg text-sm font-sans focus:outline-none focus:border-atelier-ink transition-elegant"
+            className="w-full px-3 py-2 border border-gl-border rounded-lg text-sm  focus:outline-none focus:border-gl-blue transition-elegant"
           />
           <SuggestionChips suggestions={NICHE_SUGGESTIONS} value={input.niche} onSelect={(v) => setInput((p) => ({ ...p, niche: v }))} />
         </div>
 
         {/* Persona */}
-        <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-          <label className="block text-sm font-sans font-medium text-atelier-ink mb-1">
+        <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+          <label className="block text-sm  font-medium text-gl-ink mb-1">
             Target Persona <span className="text-rose-500">*</span>
           </label>
           <input
@@ -136,14 +149,14 @@ const GeneratorForm: React.FC<GeneratorFormProps> = ({ onNavigate, onMagnetsChan
             value={input.persona}
             onChange={(e) => setInput((p) => ({ ...p, persona: e.target.value }))}
             placeholder="e.g., Founders, Growth Leads, SDR Teams..."
-            className="w-full px-3 py-2 border border-atelier-border rounded-lg text-sm font-sans focus:outline-none focus:border-atelier-ink transition-elegant"
+            className="w-full px-3 py-2 border border-gl-border rounded-lg text-sm  focus:outline-none focus:border-gl-blue transition-elegant"
           />
           <SuggestionChips suggestions={PERSONA_SUGGESTIONS} value={input.persona} onSelect={(v) => setInput((p) => ({ ...p, persona: v }))} />
         </div>
 
         {/* Pain Point */}
-        <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-          <label className="block text-sm font-sans font-medium text-atelier-ink mb-1">
+        <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+          <label className="block text-sm  font-medium text-gl-ink mb-1">
             Pain Point <span className="text-rose-500">*</span>
           </label>
           <input
@@ -151,32 +164,33 @@ const GeneratorForm: React.FC<GeneratorFormProps> = ({ onNavigate, onMagnetsChan
             value={input.painPoint}
             onChange={(e) => setInput((p) => ({ ...p, painPoint: e.target.value }))}
             placeholder="e.g., Inconsistent lead flow, poor outbound conversion..."
-            className="w-full px-3 py-2 border border-atelier-border rounded-lg text-sm font-sans focus:outline-none focus:border-atelier-ink transition-elegant"
+            className="w-full px-3 py-2 border border-gl-border rounded-lg text-sm  focus:outline-none focus:border-gl-blue transition-elegant"
           />
           <SuggestionChips suggestions={PAIN_SUGGESTIONS} value={input.painPoint} onSelect={(v) => setInput((p) => ({ ...p, painPoint: v }))} />
         </div>
 
         {/* Format + Category */}
         <div className="grid md:grid-cols-2 gap-4">
-          <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-            <label className="block text-sm font-sans font-medium text-atelier-ink mb-1">Format</label>
+          <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+            <label className="block text-sm  font-medium text-gl-ink mb-1">Format</label>
             <select
               value={input.format}
               onChange={(e) => setInput((p) => ({ ...p, format: e.target.value as MagnetFormat }))}
-              className="w-full px-3 py-2 border border-atelier-border rounded-lg text-sm font-sans focus:outline-none focus:border-atelier-ink transition-elegant bg-white"
+              className="w-full px-3 py-2 border border-gl-border rounded-lg text-sm  focus:outline-none focus:border-gl-blue transition-elegant bg-white"
             >
               {Object.values(MagnetFormat).map((f) => (
                 <option key={f} value={f}>{f}</option>
               ))}
             </select>
+            <p className="text-xs text-gl-muted mt-1.5">{FORMAT_DESCRIPTIONS[input.format]}</p>
           </div>
 
-          <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-            <label className="block text-sm font-sans font-medium text-atelier-ink mb-1">Category</label>
+          <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+            <label className="block text-sm  font-medium text-gl-ink mb-1">Category</label>
             <select
               value={input.category}
               onChange={(e) => setInput((p) => ({ ...p, category: e.target.value as MagnetCategory }))}
-              className="w-full px-3 py-2 border border-atelier-border rounded-lg text-sm font-sans focus:outline-none focus:border-atelier-ink transition-elegant bg-white"
+              className="w-full px-3 py-2 border border-gl-border rounded-lg text-sm  focus:outline-none focus:border-gl-blue transition-elegant bg-white"
             >
               {Object.values(MagnetCategory).map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -186,8 +200,8 @@ const GeneratorForm: React.FC<GeneratorFormProps> = ({ onNavigate, onMagnetsChan
         </div>
 
         {/* Lead Goal */}
-        <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-          <label className="block text-sm font-sans font-medium text-atelier-ink mb-1">
+        <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+          <label className="block text-sm  font-medium text-gl-ink mb-1">
             Lead Goal <span className="text-rose-500">*</span>
           </label>
           <input
@@ -195,14 +209,14 @@ const GeneratorForm: React.FC<GeneratorFormProps> = ({ onNavigate, onMagnetsChan
             value={input.leadGoal}
             onChange={(e) => setInput((p) => ({ ...p, leadGoal: e.target.value }))}
             placeholder="e.g., Book a strategy call, join newsletter..."
-            className="w-full px-3 py-2 border border-atelier-border rounded-lg text-sm font-sans focus:outline-none focus:border-atelier-ink transition-elegant"
+            className="w-full px-3 py-2 border border-gl-border rounded-lg text-sm  focus:outline-none focus:border-gl-blue transition-elegant"
           />
           <SuggestionChips suggestions={GOAL_SUGGESTIONS} value={input.leadGoal} onSelect={(v) => setInput((p) => ({ ...p, leadGoal: v }))} />
         </div>
 
         {/* Channels */}
-        <div className="bg-white rounded-xl border border-atelier-border shadow-soft p-5">
-          <label className="block text-sm font-sans font-medium text-atelier-ink mb-2">Distribution Channels</label>
+        <div className="bg-white rounded-xl border border-gl-border shadow-soft p-5">
+          <label className="block text-sm  font-medium text-gl-ink mb-2">Distribution Channels</label>
           <div className="flex flex-wrap gap-2">
             {Object.values(CampaignChannel).map((ch) => (
               <button
@@ -210,7 +224,7 @@ const GeneratorForm: React.FC<GeneratorFormProps> = ({ onNavigate, onMagnetsChan
                 type="button"
                 onClick={() => toggleChannel(ch)}
                 className={`text-xs px-3 py-1.5 rounded-full border transition-elegant ${
-                  input.channels.includes(ch) ? 'bg-atelier-ink text-white border-atelier-ink' : 'border-atelier-border text-atelier-muted hover:border-atelier-ink'
+                  input.channels.includes(ch) ? 'bg-gl-blue text-white border-gl-blue' : 'border-gl-border text-gl-muted hover:border-gl-blue'
                 }`}
               >
                 {ch}
@@ -230,7 +244,7 @@ const GeneratorForm: React.FC<GeneratorFormProps> = ({ onNavigate, onMagnetsChan
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-atelier-ink text-white font-sans font-medium rounded-xl hover:bg-atelier-ink/90 transition-elegant disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gl-blue text-white  font-medium rounded-xl hover:bg-gl-blue-dark transition-elegant disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
             <>

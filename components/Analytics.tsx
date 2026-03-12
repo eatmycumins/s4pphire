@@ -78,11 +78,11 @@ const Analytics: React.FC<AnalyticsProps> = ({ magnets, onNavigate }) => {
   return (
     <div className="animate-fade-in">
       <div className="mb-8">
-        <h2 className="serif-heading text-2xl md:text-3xl text-atelier-ink flex items-center gap-3">
+        <h2 className="heading text-2xl md:text-3xl text-gl-ink flex items-center gap-3">
           <BarChart3 className="w-7 h-7" />
           Analytics
         </h2>
-        <p className="text-sm text-atelier-muted mt-1">
+        <p className="text-sm text-gl-muted mt-1">
           Track performance across all your lead magnets
         </p>
       </div>
@@ -92,12 +92,12 @@ const Analytics: React.FC<AnalyticsProps> = ({ magnets, onNavigate }) => {
         {bigStats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.label} className="bg-white rounded-xl border border-atelier-border p-4 shadow-soft">
+            <div key={stat.label} className="bg-white rounded-xl border border-gl-border p-4 shadow-soft">
               <div className={`w-8 h-8 ${stat.bg} rounded-lg flex items-center justify-center mb-2`}>
                 <Icon className={`w-4 h-4 ${stat.color}`} />
               </div>
-              <p className="text-xl font-sans font-semibold text-atelier-ink">{stat.value}</p>
-              <p className="text-[10px] text-atelier-muted uppercase tracking-wide mt-0.5">{stat.label}</p>
+              <p className="text-xl  font-semibold text-gl-ink">{stat.value}</p>
+              <p className="text-[10px] text-gl-muted uppercase tracking-wide mt-0.5">{stat.label}</p>
             </div>
           );
         })}
@@ -105,28 +105,28 @@ const Analytics: React.FC<AnalyticsProps> = ({ magnets, onNavigate }) => {
 
       <div className="grid lg:grid-cols-2 gap-6 mb-6">
         {/* Niche Performance */}
-        <div className="bg-white rounded-xl border border-atelier-border shadow-soft">
-          <div className="px-5 py-4 border-b border-atelier-border">
-            <h3 className="font-sans font-medium text-atelier-ink flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-atelier-highlight" />
+        <div className="bg-white rounded-xl border border-gl-border shadow-soft">
+          <div className="px-5 py-4 border-b border-gl-border">
+            <h3 className=" font-medium text-gl-ink flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-gl-blue" />
               Performance by Niche
             </h3>
           </div>
           {nichePerformance.length === 0 ? (
-            <div className="px-5 py-8 text-center text-sm text-atelier-muted">No data yet</div>
+            <div className="px-5 py-8 text-center text-sm text-gl-muted">No data yet</div>
           ) : (
-            <div className="divide-y divide-atelier-border">
+            <div className="divide-y divide-gl-border">
               {nichePerformance.map((n) => (
                 <div key={n.niche} className="px-5 py-3 flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-atelier-ink">{n.niche}</p>
-                    <p className="text-[11px] text-atelier-muted">{n.count} magnet{n.count !== 1 ? 's' : ''}</p>
+                    <p className="text-sm font-medium text-gl-ink">{n.niche}</p>
+                    <p className="text-[11px] text-gl-muted">{n.count} magnet{n.count !== 1 ? 's' : ''}</p>
                   </div>
-                  <div className="flex gap-4 text-xs text-atelier-muted">
+                  <div className="flex gap-4 text-xs text-gl-muted">
                     <span>{n.downloads} DL</span>
                     <span>{n.optIns} leads</span>
                     <span>{n.meetings} mtgs</span>
-                    <span className="font-medium text-atelier-ink">${n.revenue.toLocaleString()}</span>
+                    <span className="font-medium text-gl-ink">${n.revenue.toLocaleString()}</span>
                   </div>
                 </div>
               ))}
@@ -135,17 +135,17 @@ const Analytics: React.FC<AnalyticsProps> = ({ magnets, onNavigate }) => {
         </div>
 
         {/* Format Performance */}
-        <div className="bg-white rounded-xl border border-atelier-border shadow-soft">
-          <div className="px-5 py-4 border-b border-atelier-border">
-            <h3 className="font-sans font-medium text-atelier-ink flex items-center gap-2">
+        <div className="bg-white rounded-xl border border-gl-border shadow-soft">
+          <div className="px-5 py-4 border-b border-gl-border">
+            <h3 className=" font-medium text-gl-ink flex items-center gap-2">
               <FileText className="w-4 h-4 text-purple-600" />
               Performance by Format
             </h3>
           </div>
           {summary.topFormats.length === 0 ? (
-            <div className="px-5 py-8 text-center text-sm text-atelier-muted">No data yet</div>
+            <div className="px-5 py-8 text-center text-sm text-gl-muted">No data yet</div>
           ) : (
-            <div className="divide-y divide-atelier-border">
+            <div className="divide-y divide-gl-border">
               {summary.topFormats.map((f) => {
                 const formatMagnets = magnets.filter((m) => m.format === f.format);
                 const formatMetrics = formatMagnets.map((m) => allMetrics.find((x) => x.magnetId === m.id));
@@ -154,12 +154,12 @@ const Analytics: React.FC<AnalyticsProps> = ({ magnets, onNavigate }) => {
                 return (
                   <div key={f.format} className="px-5 py-3 flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-atelier-ink">{f.format}</p>
-                      <p className="text-[11px] text-atelier-muted">{f.count} magnet{f.count !== 1 ? 's' : ''}</p>
+                      <p className="text-sm font-medium text-gl-ink">{f.format}</p>
+                      <p className="text-[11px] text-gl-muted">{f.count} magnet{f.count !== 1 ? 's' : ''}</p>
                     </div>
-                    <div className="flex gap-4 text-xs text-atelier-muted">
+                    <div className="flex gap-4 text-xs text-gl-muted">
                       <span>{totalDL} DL</span>
-                      <span className="font-medium text-atelier-ink">${totalRevenue.toLocaleString()}</span>
+                      <span className="font-medium text-gl-ink">${totalRevenue.toLocaleString()}</span>
                     </div>
                   </div>
                 );
@@ -170,39 +170,39 @@ const Analytics: React.FC<AnalyticsProps> = ({ magnets, onNavigate }) => {
       </div>
 
       {/* Per-Magnet Table */}
-      <div className="bg-white rounded-xl border border-atelier-border shadow-soft overflow-hidden">
-        <div className="px-5 py-4 border-b border-atelier-border">
-          <h3 className="font-sans font-medium text-atelier-ink">Individual Magnet Performance</h3>
+      <div className="bg-white rounded-xl border border-gl-border shadow-soft overflow-hidden">
+        <div className="px-5 py-4 border-b border-gl-border">
+          <h3 className=" font-medium text-gl-ink">Individual Magnet Performance</h3>
         </div>
         {magnetPerformance.length === 0 ? (
-          <div className="px-5 py-8 text-center text-sm text-atelier-muted">No lead magnets to track yet</div>
+          <div className="px-5 py-8 text-center text-sm text-gl-muted">No lead magnets to track yet</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-atelier-border bg-atelier-bg/30">
-                  <th className="text-left text-[11px] font-sans font-medium text-atelier-muted uppercase tracking-wide px-5 py-3">Title</th>
-                  <th className="text-left text-[11px] font-sans font-medium text-atelier-muted uppercase tracking-wide px-5 py-3 hidden md:table-cell">Niche</th>
-                  <th className="text-center text-[11px] font-sans font-medium text-atelier-muted uppercase tracking-wide px-3 py-3">DL</th>
-                  <th className="text-center text-[11px] font-sans font-medium text-atelier-muted uppercase tracking-wide px-3 py-3">Leads</th>
-                  <th className="text-center text-[11px] font-sans font-medium text-atelier-muted uppercase tracking-wide px-3 py-3 hidden sm:table-cell">Replies</th>
-                  <th className="text-center text-[11px] font-sans font-medium text-atelier-muted uppercase tracking-wide px-3 py-3 hidden sm:table-cell">Mtgs</th>
-                  <th className="text-right text-[11px] font-sans font-medium text-atelier-muted uppercase tracking-wide px-5 py-3">Revenue</th>
+                <tr className="border-b border-gl-border bg-gl-bg/30">
+                  <th className="text-left text-[11px]  font-medium text-gl-muted uppercase tracking-wide px-5 py-3">Title</th>
+                  <th className="text-left text-[11px]  font-medium text-gl-muted uppercase tracking-wide px-5 py-3 hidden md:table-cell">Niche</th>
+                  <th className="text-center text-[11px]  font-medium text-gl-muted uppercase tracking-wide px-3 py-3">DL</th>
+                  <th className="text-center text-[11px]  font-medium text-gl-muted uppercase tracking-wide px-3 py-3">Leads</th>
+                  <th className="text-center text-[11px]  font-medium text-gl-muted uppercase tracking-wide px-3 py-3 hidden sm:table-cell">Replies</th>
+                  <th className="text-center text-[11px]  font-medium text-gl-muted uppercase tracking-wide px-3 py-3 hidden sm:table-cell">Mtgs</th>
+                  <th className="text-right text-[11px]  font-medium text-gl-muted uppercase tracking-wide px-5 py-3">Revenue</th>
                   <th className="px-3 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-atelier-border">
+              <tbody className="divide-y divide-gl-border">
                 {magnetPerformance.map((item) => (
-                  <tr key={item.magnet.id} className="hover:bg-atelier-bg/30 transition-elegant">
-                    <td className="px-5 py-3 text-sm text-atelier-ink font-medium max-w-[250px] truncate">{item.magnet.title}</td>
-                    <td className="px-5 py-3 text-xs text-atelier-muted hidden md:table-cell">{item.magnet.niche}</td>
+                  <tr key={item.magnet.id} className="hover:bg-gl-bg/30 transition-elegant">
+                    <td className="px-5 py-3 text-sm text-gl-ink font-medium max-w-[250px] truncate">{item.magnet.title}</td>
+                    <td className="px-5 py-3 text-xs text-gl-muted hidden md:table-cell">{item.magnet.niche}</td>
                     <td className="px-3 py-3 text-sm text-center">{item.downloads}</td>
                     <td className="px-3 py-3 text-sm text-center">{item.optIns}</td>
                     <td className="px-3 py-3 text-sm text-center hidden sm:table-cell">{item.replies}</td>
                     <td className="px-3 py-3 text-sm text-center hidden sm:table-cell">{item.meetings}</td>
                     <td className="px-5 py-3 text-sm text-right font-medium">${item.revenue.toLocaleString()}</td>
                     <td className="px-3 py-3">
-                      <button onClick={() => onNavigate(AppPage.VIEW_MAGNET, item.magnet.id)} className="text-atelier-muted hover:text-atelier-ink transition-elegant">
+                      <button onClick={() => onNavigate(AppPage.VIEW_MAGNET, item.magnet.id)} className="text-gl-muted hover:text-gl-ink transition-elegant">
                         <Eye className="w-3.5 h-3.5" />
                       </button>
                     </td>
