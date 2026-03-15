@@ -39,4 +39,5 @@ export {
   Menu,
   Save,
   ArrowRight,
+  ImageIcon,
 } from 'lucide-react';

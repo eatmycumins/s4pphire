@@ -7,6 +7,7 @@ import {
   LandingPage,
   CapturedLead,
   MagnetMetrics,
+  MagnetImages,
   AnalyticsSummary,
   LeadMagnetStatus,
 } from '../types';
@@ -16,6 +17,7 @@ const KEYS = {
   LANDING_PAGES: 'growleads_landing_pages',
   LEADS: 'growleads_leads',
   METRICS: 'growleads_metrics',
+  MAGNET_IMAGES: 'growleads_magnet_images',
 };
 
 // --- Helpers ---
@@ -80,6 +82,42 @@ export function deleteMagnet(id: string): void {
   write(KEYS.MAGNETS, read<LeadMagnet>(KEYS.MAGNETS).filter((m) => m.id !== id));
   write(KEYS.METRICS, read<MagnetMetrics>(KEYS.METRICS).filter((m) => m.magnetId !== id));
   write(KEYS.LANDING_PAGES, read<LandingPage>(KEYS.LANDING_PAGES).filter((p) => p.magnetId !== id));
+  deleteMagnetImages(id);
+}
+
+// --- Magnet Images ---
+
+export function getMagnetImages(magnetId: string): MagnetImages | undefined {
+  try {
+    const raw = localStorage.getItem(KEYS.MAGNET_IMAGES);
+    const map: Record<string, MagnetImages> = raw ? JSON.parse(raw) : {};
+    return map[magnetId];
+  } catch {
+    return undefined;
+  }
+}
+
+export function saveMagnetImages(magnetId: string, images: MagnetImages): void {
+  try {
+    const raw = localStorage.getItem(KEYS.MAGNET_IMAGES);
+    const map: Record<string, MagnetImages> = raw ? JSON.parse(raw) : {};
+    map[magnetId] = images;
+    localStorage.setItem(KEYS.MAGNET_IMAGES, JSON.stringify(map));
+  } catch {
+    throw new Error('Storage full — try deleting unused magnets to free space.');
+  }
+}
+
+export function deleteMagnetImages(magnetId: string): void {
+  try {
+    const raw = localStorage.getItem(KEYS.MAGNET_IMAGES);
+    if (!raw) return;
+    const map: Record<string, MagnetImages> = JSON.parse(raw);
+    delete map[magnetId];
+    localStorage.setItem(KEYS.MAGNET_IMAGES, JSON.stringify(map));
+  } catch {
+    // Ignore cleanup errors
+  }
 }
 
 // --- Landing Pages ---

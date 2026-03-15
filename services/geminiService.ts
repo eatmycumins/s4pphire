@@ -4,7 +4,7 @@
 // ============================================================
 
 import { GoogleGenAI, Type } from '@google/genai';
-import { GenerateInput, GenerationResult, RepurposeResult, MagnetFormat } from '../types';
+import { GenerateInput, GenerationResult, RepurposeResult, MagnetFormat, LeadMagnet, MagnetImages } from '../types';
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 const MODEL = 'gemini-2.5-flash';
@@ -697,4 +697,78 @@ CTA should be action-oriented.`;
 
   if (!response.text) throw new Error('No response from AI');
   return JSON.parse(response.text);
+}
+
+// --- Mode 4: Image Generation ---
+
+const IMAGE_MODEL = 'imagen-3.0-generate-002';
+const MAX_SECTION_IMAGES = 5;
+
+function extractHeadings(content: string): string[] {
+  const matches = content.match(/^#{1,2} (.+)$/gm);
+  if (!matches) return [];
+  return matches
+    .map((m) => m.replace(/^#{1,2} /, ''))
+    .slice(0, MAX_SECTION_IMAGES);
+}
+
+export async function generateMagnetImages(
+  magnet: LeadMagnet,
+  onProgress?: (current: number, total: number, label: string) => void
+): Promise<MagnetImages> {
+  const headings = extractHeadings(magnet.content);
+  const total = 1 + headings.length;
+  const result: MagnetImages = {
+    sectionImages: {},
+    generatedAt: new Date().toISOString(),
+  };
+
+  // Generate cover image
+  onProgress?.(1, total, 'Cover Image');
+  try {
+    const coverPrompt = `Professional, modern cover illustration for a B2B lead magnet titled "${magnet.title}" in the ${magnet.niche} industry targeting ${magnet.persona}. Clean, minimalist corporate design with abstract shapes and gradients. No text, no words, no letters.`;
+    const coverResponse = await ai.models.generateImages({
+      model: IMAGE_MODEL,
+      prompt: coverPrompt,
+      config: {
+        numberOfImages: 1,
+        aspectRatio: '16:9',
+        outputMimeType: 'image/jpeg',
+        outputCompressionQuality: 70,
+      },
+    });
+    const coverImg = coverResponse.generatedImages?.[0]?.image;
+    if (coverImg?.imageBytes) {
+      result.coverImage = `data:${coverImg.mimeType || 'image/jpeg'};base64,${coverImg.imageBytes}`;
+    }
+  } catch {
+    // Cover image failed — continue with sections
+  }
+
+  // Generate section images
+  for (let i = 0; i < headings.length; i++) {
+    const heading = headings[i];
+    onProgress?.(i + 2, total, heading);
+    try {
+      const sectionPrompt = `Clean, professional illustration representing the concept of "${heading}" for ${magnet.niche} professionals. Minimalist, modern corporate style with subtle colors. No text, no words, no letters.`;
+      const sectionResponse = await ai.models.generateImages({
+        model: IMAGE_MODEL,
+        prompt: sectionPrompt,
+        config: {
+          numberOfImages: 1,
+          aspectRatio: '16:9',
+          outputMimeType: 'image/jpeg',
+          outputCompressionQuality: 60,
+        },
+      });
+      const sectionImg = sectionResponse.generatedImages?.[0]?.image;
+      if (sectionImg?.imageBytes) {
+        result.sectionImages[heading] = `data:${sectionImg.mimeType || 'image/jpeg'};base64,${sectionImg.imageBytes}`;
+      }
+    } catch {
+      // Skip failed section images
+    }
+  }
+
+  return result;
 }

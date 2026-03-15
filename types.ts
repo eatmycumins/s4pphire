@@ -142,6 +142,14 @@ export interface RepurposeResult {
   changeNotes: string;
 }
 
+// --- Images ---
+
+export interface MagnetImages {
+  coverImage?: string;
+  sectionImages: Record<string, string>;
+  generatedAt: string;
+}
+
 // --- Analytics ---
 
 export interface AnalyticsSummary {

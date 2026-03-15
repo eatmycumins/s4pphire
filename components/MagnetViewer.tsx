@@ -4,6 +4,7 @@ import {
   LeadMagnet,
   LeadMagnetStatus,
   MagnetMetrics,
+  MagnetImages,
 } from '../types';
 import {
   saveMagnet,
@@ -11,7 +12,10 @@ import {
   getMetrics,
   updateMetrics,
   getLandingPageByMagnet,
+  getMagnetImages,
+  saveMagnetImages,
 } from '../services/storageService';
+import { generateMagnetImages } from '../services/geminiService';
 import {
   ArrowLeft,
   Copy,
@@ -29,6 +33,8 @@ import {
   Check,
   Archive,
   Send,
+  ImageIcon,
+  Loader2,
 } from './Icon';
 
 interface MagnetViewerProps {
@@ -44,8 +50,29 @@ const MagnetViewer: React.FC<MagnetViewerProps> = ({ magnet, onNavigate, onMagne
   const [copied, setCopied] = useState(false);
   const [showMetrics, setShowMetrics] = useState(false);
   const [metricsForm, setMetricsForm] = useState<MagnetMetrics>(() => getMetrics(magnet.id));
+  const [images, setImages] = useState<MagnetImages | undefined>(() => getMagnetImages(magnet.id));
+  const [generatingImages, setGeneratingImages] = useState(false);
+  const [imageProgress, setImageProgress] = useState({ current: 0, total: 0, label: '' });
+  const [imageError, setImageError] = useState('');
 
   const hasLandingPage = useMemo(() => !!getLandingPageByMagnet(magnet.id), [magnet.id]);
+
+  const handleGenerateImages = async () => {
+    if (images && !confirm('Regenerate all images? This will replace existing ones.')) return;
+    setGeneratingImages(true);
+    setImageError('');
+    try {
+      const result = await generateMagnetImages(magnet, (current, total, label) => {
+        setImageProgress({ current, total, label });
+      });
+      saveMagnetImages(magnet.id, result);
+      setImages(result);
+    } catch (err: any) {
+      setImageError(err.message || 'Image generation failed.');
+    } finally {
+      setGeneratingImages(false);
+    }
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(magnet.content);
@@ -143,6 +170,21 @@ const MagnetViewer: React.FC<MagnetViewerProps> = ({ magnet, onNavigate, onMagne
       .replace(/^### (.+)$/gm, '<h3>$1</h3>')
       .replace(/^## (.+)$/gm, '<h2>$1</h2>')
       .replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+    // Inject section images after H1/H2 headings
+    if (images?.sectionImages) {
+      processed = processed.replace(
+        /<h([12])>(.+?)<\/h\1>/g,
+        (match, _level, text) => {
+          const cleanText = text.replace(/<[^>]+>/g, '');
+          const imgSrc = images.sectionImages[cleanText];
+          if (imgSrc) {
+            return `${match}<img src="${imgSrc}" alt="Illustration for ${cleanText}" class="section-image" style="width:100%;max-height:300px;object-fit:cover;border-radius:0.5rem;margin:1rem 0" />`;
+          }
+          return match;
+        }
+      );
+    }
 
     // Horizontal rules
     processed = processed.replace(/^---$/gm, '<hr />');
@@ -277,6 +319,22 @@ const MagnetViewer: React.FC<MagnetViewerProps> = ({ magnet, onNavigate, onMagne
                 <button onClick={() => onNavigate(AppPage.REPURPOSE)} className="flex items-center gap-1.5 px-3 py-1.5 border border-gl-border text-xs rounded-lg hover:bg-gl-bg transition-elegant">
                   <RefreshCw className="w-3.5 h-3.5" /> Repurpose
                 </button>
+                <button
+                  onClick={handleGenerateImages}
+                  disabled={generatingImages}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg transition-elegant ${
+                    images
+                      ? 'border border-gl-border hover:bg-gl-bg'
+                      : 'bg-purple-600 text-white hover:bg-purple-700'
+                  }`}
+                >
+                  {generatingImages ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <ImageIcon className="w-3.5 h-3.5" />
+                  )}
+                  {generatingImages ? 'Generating...' : images ? 'Regenerate Images' : 'Generate Images'}
+                </button>
                 {!hasLandingPage && (
                   <button onClick={() => onNavigate(AppPage.LANDING_PAGES, magnet.id)} className="flex items-center gap-1.5 px-3 py-1.5 bg-gl-blue text-white text-xs rounded-lg hover:bg-gl-blue-dark transition-elegant">
                     <Globe className="w-3.5 h-3.5" /> Create Landing Page
@@ -297,6 +355,28 @@ const MagnetViewer: React.FC<MagnetViewerProps> = ({ magnet, onNavigate, onMagne
               {editing ? 'Edit Content' : 'Preview'}
             </h3>
           </div>
+          {generatingImages && (
+            <div className="bg-blue-50 border-b border-blue-200 px-5 py-3">
+              <div className="flex items-center gap-2 text-sm text-blue-700">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Generating image {imageProgress.current} of {imageProgress.total}: {imageProgress.label}
+              </div>
+            </div>
+          )}
+          {imageError && (
+            <div className="bg-rose-50 border-b border-rose-200 px-5 py-3">
+              <p className="text-sm text-rose-700">{imageError}</p>
+            </div>
+          )}
+          {images?.coverImage && !editing && (
+            <div className="px-5 pt-5">
+              <img
+                src={images.coverImage}
+                alt={`Cover image for ${magnet.title}`}
+                className="w-full rounded-lg shadow-soft"
+              />
+            </div>
+          )}
           {editing ? (
             <textarea
               value={editContent}
