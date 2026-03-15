@@ -1,132 +1,114 @@
-import React, { useState } from 'react';
-import WorkflowUploader from './components/WorkflowUploader';
-import NodeList from './components/NodeList';
-import Optimizer from './components/Optimizer';
-import { N8nWorkflow, AINodeInfo, AppStep } from './types';
-import { Icons } from './components/Icon';
+import React, { useState, useCallback } from 'react';
+import { AppPage, LeadMagnet } from './types';
+import { getAllMagnets, getMagnet, getLandingPage } from './services/storageService';
+import Sidebar from './components/Sidebar';
+import Dashboard from './components/Dashboard';
+import GeneratorForm from './components/GeneratorForm';
+import RepurposeForm from './components/RepurposeForm';
+import Library from './components/Library';
+import MagnetViewer from './components/MagnetViewer';
+import LandingPageBuilder from './components/LandingPageBuilder';
+import PublicLanding from './components/PublicLanding';
+import LeadsList from './components/LeadsList';
+import Analytics from './components/Analytics';
+import { Menu } from './components/Icon';
 
 const App: React.FC = () => {
-  const [step, setStep] = useState<AppStep>(AppStep.UPLOAD);
-  const [nodes, setNodes] = useState<AINodeInfo[]>([]);
-  const [selectedNode, setSelectedNode] = useState<AINodeInfo | null>(null);
+  const [page, setPage] = useState<AppPage>(AppPage.DASHBOARD);
+  const [selectedId, setSelectedId] = useState<string | undefined>();
+  const [magnets, setMagnets] = useState<LeadMagnet[]>(() => getAllMagnets());
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const processWorkflow = (workflow: N8nWorkflow) => {
-    const aiNodes: AINodeInfo[] = [];
+  const refreshMagnets = useCallback(() => {
+    setMagnets(getAllMagnets());
+  }, []);
 
-    workflow.nodes.forEach(node => {
-        const typeLower = node.type.toLowerCase();
-        
-        const isAI = 
-            typeLower.includes('langchain') || 
-            typeLower.includes('openai') || 
-            typeLower.includes('anthropic') || 
-            typeLower.includes('gemini') ||
-            typeLower.includes('mistral') ||
-            (node.type === '@n8n/n8n-nodes-langchain.googleGemini' && node.parameters.prompt); 
+  const navigate = useCallback((newPage: AppPage, id?: string) => {
+    setPage(newPage);
+    setSelectedId(id);
+    window.scrollTo(0, 0);
+  }, []);
 
-        if (isAI) {
-            let sys = undefined;
-            let user = undefined;
+  const renderPage = () => {
+    switch (page) {
+      case AppPage.DASHBOARD:
+        return <Dashboard magnets={magnets} onNavigate={navigate} />;
 
-            if (node.parameters.options?.systemMessage) {
-                sys = node.parameters.options.systemMessage as string;
-            }
-            if (node.parameters.messages?.values?.[0]?.content) {
-                user = node.parameters.messages.values[0].content;
-            } else if (node.parameters.messages?.messageValues?.[0]?.message) {
-                 user = node.parameters.messages.messageValues[0].message;
-            }
+      case AppPage.GENERATE:
+        return <GeneratorForm onNavigate={navigate} onMagnetsChange={refreshMagnets} />;
 
-            if (node.parameters.prompt && typeof node.parameters.prompt === 'string') {
-                user = node.parameters.prompt;
-                sys = "Image Generation Model Context";
-            }
+      case AppPage.REPURPOSE:
+        return <RepurposeForm magnets={magnets} onNavigate={navigate} onMagnetsChange={refreshMagnets} />;
 
-            if (!sys && !user) {
-                const potentialKeys = Object.keys(node.parameters).filter(k => 
-                    typeof node.parameters[k] === 'string' && (k.toLowerCase().includes('prompt') || k.toLowerCase().includes('text'))
-                );
-                if (potentialKeys.length > 0) {
-                    user = node.parameters[potentialKeys[0]] as string;
-                }
-            }
+      case AppPage.LIBRARY:
+        return <Library magnets={magnets} onNavigate={navigate} />;
 
-            aiNodes.push({
-                id: node.id,
-                name: node.name,
-                type: node.type,
-                currentSystemPrompt: sys,
-                currentUserPrompt: user,
-                originalJson: node
-            });
-        }
-    });
+      case AppPage.VIEW_MAGNET: {
+        const magnet = selectedId ? getMagnet(selectedId) : undefined;
+        if (!magnet) return <Library magnets={magnets} onNavigate={navigate} />;
+        return <MagnetViewer magnet={magnet} onNavigate={navigate} onMagnetsChange={refreshMagnets} />;
+      }
 
-    setNodes(aiNodes);
-    setStep(AppStep.SELECT);
+      case AppPage.LANDING_PAGES:
+        return <LandingPageBuilder magnets={magnets} targetMagnetId={selectedId} onNavigate={navigate} />;
+
+      case AppPage.PUBLIC_LANDING: {
+        const landingPage = selectedId ? getLandingPage(selectedId) : undefined;
+        if (!landingPage) return <LandingPageBuilder magnets={magnets} onNavigate={navigate} />;
+        return <PublicLanding landingPage={landingPage} onNavigate={navigate} />;
+      }
+
+      case AppPage.LEADS:
+        return <LeadsList magnets={magnets} onNavigate={navigate} />;
+
+      case AppPage.ANALYTICS:
+        return <Analytics magnets={magnets} onNavigate={navigate} />;
+
+      default:
+        return <Dashboard magnets={magnets} onNavigate={navigate} />;
+    }
   };
 
-  const handleNodeSelect = (node: AINodeInfo) => {
-    setSelectedNode(node);
-    setStep(AppStep.OPTIMIZE);
-  };
+  // Public landing page gets full screen
+  if (page === AppPage.PUBLIC_LANDING) {
+    const landingPage = selectedId ? getLandingPage(selectedId) : undefined;
+    if (landingPage) {
+      return (
+        <div className="min-h-screen bg-gl-bg text-gl-ink relative selection:bg-gl-blue selection:text-white">
+          <PublicLanding landingPage={landingPage} onNavigate={navigate} />
+        </div>
+      );
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-atelier-bg text-atelier-ink flex flex-col relative selection:bg-atelier-ink selection:text-white">
-      
-      {/* Texture Overlay */}
-      <div className="bg-grain"></div>
+    <div className="min-h-screen bg-gl-bg text-gl-ink flex relative selection:bg-gl-blue selection:text-white">
+      {/* Sidebar */}
+      <Sidebar
+        currentPage={page}
+        onNavigate={navigate}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-      {/* Decorative Aura */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-white to-transparent opacity-80 pointer-events-none blur-3xl z-0"></div>
-
-      {step !== AppStep.OPTIMIZE && (
-        <header className="relative z-10 w-full pt-12 pb-6 px-6">
-            <div className="max-w-4xl mx-auto flex items-center justify-between border-b border-atelier-border pb-6">
-                <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setStep(AppStep.UPLOAD)}>
-                    <div className="relative w-10 h-10 flex items-center justify-center bg-white rounded-lg border border-atelier-border shadow-soft group-hover:shadow-md transition-elegant">
-                        <Icons.Sparkles className="w-5 h-5 text-atelier-ink" />
-                    </div>
-                    <div>
-                        <h1 className="serif-heading text-2xl text-atelier-ink tracking-tight">
-                            The Optimizer
-                        </h1>
-                        <p className="text-[10px] font-sans text-atelier-muted tracking-[0.2em] uppercase">n8n Agent Atelier</p>
-                    </div>
-                </div>
-                
-                <div className="hidden md:flex items-center gap-6">
-                    <div className="flex items-center gap-2 text-xs font-sans text-atelier-muted">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-500/50"></span>
-                        <span className="opacity-60">System Ready</span>
-                    </div>
-                </div>
-            </div>
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-h-screen lg:ml-0">
+        {/* Mobile Header */}
+        <header className="lg:hidden sticky top-0 z-30 bg-white/80 backdrop-blur-sm border-b border-gl-border px-4 py-3">
+          <div className="flex items-center justify-between">
+            <button onClick={() => setSidebarOpen(true)} className="p-1.5 hover:bg-gl-bg rounded-lg transition-elegant">
+              <Menu className="w-5 h-5 text-gl-ink" />
+            </button>
+            <h1 className="heading text-lg text-gl-ink">GrowLeads</h1>
+            <div className="w-8" />
+          </div>
         </header>
-      )}
 
-      <main className="relative z-10 flex-1 flex flex-col items-center w-full">
-        <div className="w-full h-full flex items-center justify-center">
-            {step === AppStep.UPLOAD && (
-                <WorkflowUploader onUpload={processWorkflow} />
-            )}
-
-            {step === AppStep.SELECT && (
-                <NodeList 
-                    nodes={nodes} 
-                    onSelect={handleNodeSelect} 
-                    onBack={() => setStep(AppStep.UPLOAD)} 
-                />
-            )}
-
-            {step === AppStep.OPTIMIZE && selectedNode && (
-                <Optimizer 
-                    node={selectedNode} 
-                    onBack={() => setStep(AppStep.SELECT)} 
-                />
-            )}
-        </div>
-      </main>
+        {/* Page Content */}
+        <main className="flex-1 relative z-10 px-4 md:px-8 py-6 md:py-8 max-w-7xl w-full mx-auto">
+          {renderPage()}
+        </main>
+      </div>
     </div>
   );
 };

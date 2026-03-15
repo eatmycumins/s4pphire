@@ -2,40 +2,39 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="https://n8n.io/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232563EB'/%3E%3Cpath d='M16 6 L10 16 L16 13 L16 26 L22 16 L16 19 Z' fill='white'/%3E%3C/svg%3E" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>n8n Agent Optimizer</title>
+    <title>Growleads — Lead Magnet Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              serif: ['Playfair Display', 'serif'],
-              sans: ['Space Grotesk', 'sans-serif'],
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              display: ['Space Grotesk', 'sans-serif'],
             },
             colors: {
-              atelier: {
-                bg: '#FDFBF7',
+              gl: {
+                bg: '#F8FAFC',
                 card: '#FFFFFF',
-                ink: '#1C1917',
-                muted: '#57534E',
-                border: '#E7E5E4',
-                accent: '#D6D3D1',
-                highlight: '#2563EB'
+                ink: '#0F172A',
+                muted: '#64748B',
+                border: '#E2E8F0',
+                accent: '#CBD5E1',
+                blue: '#2563EB',
+                'blue-light': '#DBEAFE',
+                'blue-dark': '#1D4ED8',
               }
             },
-            backgroundImage: {
-              'noise': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
-            },
             boxShadow: {
-              'soft': '0 4px 20px -2px rgba(28, 25, 23, 0.05)',
-              'elegant': '0 10px 40px -10px rgba(28, 25, 23, 0.08)',
+              'soft': '0 1px 3px 0 rgba(0,0,0,0.05), 0 1px 2px -1px rgba(0,0,0,0.05)',
+              'elegant': '0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05)',
             },
             animation: {
-              'fade-in': 'fadeIn 0.8s ease-out forwards',
-              'slide-up': 'slideUp 0.6s ease-out forwards',
+              'fade-in': 'fadeIn 0.5s ease-out forwards',
+              'slide-up': 'slideUp 0.4s ease-out forwards',
             },
             keyframes: {
               fadeIn: {
@@ -43,7 +42,7 @@
                 '100%': { opacity: '1' },
               },
               slideUp: {
-                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '0%': { opacity: '0', transform: 'translateY(12px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               }
             }
@@ -53,37 +52,62 @@
     </script>
     <style>
       body {
-        background-color: #FDFBF7;
-        color: #1C1917;
-        font-family: 'Space Grotesk', sans-serif;
-      }
-      
-      /* Grain Texture Overlay */
-      .bg-grain {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-        pointer-events: none;
-        z-index: 50;
+        background-color: #F8FAFC;
+        color: #0F172A;
+        font-family: 'Inter', system-ui, sans-serif;
       }
 
-      /* Premium Scrollbar */
       ::-webkit-scrollbar { width: 6px; height: 6px; }
       ::-webkit-scrollbar-track { background: transparent; }
-      ::-webkit-scrollbar-thumb { background: #E7E5E4; border-radius: 3px; }
-      ::-webkit-scrollbar-thumb:hover { background: #A8A29E; }
-      
-      .serif-heading {
-        font-family: 'Playfair Display', serif;
+      ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+      .heading {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
       }
 
-      /* Smooth transitions */
       .transition-elegant {
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.2s ease;
       }
+
+      .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .line-clamp-1 {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      /* Magnet content renderer styles */
+      .magnet-content h1 { font-size: 1.5rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; font-family: 'Space Grotesk', sans-serif; color: #0F172A; }
+      .magnet-content h2 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; font-family: 'Space Grotesk', sans-serif; color: #0F172A; border-bottom: 1px solid #E2E8F0; padding-bottom: 0.4rem; }
+      .magnet-content h3 { font-size: 1.05rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.4rem; color: #1E293B; }
+      .magnet-content p { margin-bottom: 0.5rem; line-height: 1.7; color: #334155; font-size: 0.9rem; }
+      .magnet-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 0.5rem; }
+      .magnet-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 0.5rem; }
+      .magnet-content li { margin-bottom: 0.25rem; color: #334155; line-height: 1.6; font-size: 0.9rem; }
+      .magnet-content strong { font-weight: 600; color: #0F172A; }
+      .magnet-content em { font-style: italic; }
+      .magnet-content blockquote { border-left: 3px solid #2563EB; background: #EFF6FF; padding: 0.75rem 1rem; margin: 0.75rem 0; border-radius: 0 0.375rem 0.375rem 0; }
+      .magnet-content blockquote p { color: #1E40AF; margin: 0; }
+      .magnet-content pre { background: #1E293B; color: #E2E8F0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 0.75rem 0; font-size: 0.8rem; line-height: 1.6; }
+      .magnet-content code { font-family: 'Courier New', monospace; }
+      .magnet-content :not(pre) > code { background: #F1F5F9; padding: 0.1rem 0.35rem; border-radius: 0.25rem; color: #1D4ED8; font-size: 0.85em; }
+      .magnet-content hr { border: none; border-top: 1px solid #E2E8F0; margin: 1.25rem 0; }
+      .magnet-content table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+      .magnet-content th { background: #F8FAFC; border: 1px solid #E2E8F0; padding: 0.5rem 0.75rem; text-align: left; font-weight: 600; color: #0F172A; }
+      .magnet-content td { border: 1px solid #E2E8F0; padding: 0.5rem 0.75rem; color: #334155; }
+      .magnet-content .checkbox-item { display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.35rem; padding: 0.2rem 0; }
+      .magnet-content .checkbox-item input[type="checkbox"] { margin-top: 0.2rem; accent-color: #2563EB; width: 1rem; height: 1rem; flex-shrink: 0; }
+      .magnet-content .checkbox-item span { color: #334155; font-size: 0.9rem; line-height: 1.5; }
+      .magnet-content .placeholder { background: #FEF3C7; color: #92400E; padding: 0.1rem 0.35rem; border-radius: 0.25rem; font-weight: 600; font-size: 0.85em; }
     </style>
   <script type="importmap">
 {
